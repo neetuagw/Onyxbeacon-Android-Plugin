@@ -1,0 +1,38 @@
+repositories {
+    mavenCentral()
+    jcenter()
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+dependencies {
+    compile 'com.android.support:appcompat-v7:21.0.3'
+
+    // Play services
+    compile 'com.google.android.gms:play-services-gcm:9.0.2'
+    
+    //Location Services
+    compile 'com.google.android.gms:play-services-location:9.0.2'
+
+    // Onyx Library
+    compile 'com.onyxbeacon:OnyxBeaconLibrary-release:2.4@aar'
+	
+	// Retrofit
+	//compile 'com.squareup.retrofit:retrofit:1.9.0'
+    compile files('libs/retrofit-1.9.0.jar')
+    
+    //OKHttp
+    //compile 'com.squareup.okhttp:okhttp:2.2.0'
+	
+	// Realm
+	compile 'io.realm:realm-android:0.86.0'
+	
+	//gson
+	compile "com.google.code.gson:gson:2.3.1"
+	
+	//volley
+	compile 'com.mcxiaoke.volley:library:1.0.19'
+    
+    //compile 'com.github.goka.blurredgridmenu:blurredgridmenu:1.0.2'
+}

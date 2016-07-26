@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	id="cordova-plugin-onyxbeacon"
+	version="0.1.0">
+
+	<name>OnyxbeaconPhonegap</name>
+    <description>Phonegap/Cordova Plugin for OnyxBeacon</description>
+    <license>MIT</license>
+    <keywords>Onyx,Beacons</keywords>
+	
+	<js-module src="plugin/www/onyxbeacon.js" name="OnyxbeaconPhonegap">
+		<clobbers target="OnyxbeaconPhonegap" />
+	</js-module>
+	
+	<platform name="android">
+		<!-- android-specific elements -->
+		
+		<config-file target="res/xml/config.xml" parent="/*">
+       		<feature name="OnyxbeaconPhonegap" >
+              	<param name="android-package" value="com.sparta.onyxbeacon.OnyxbeaconPhonegap"/>
+        	</feature>
+   		</config-file>
+		
+		<!--Native Permissions-->
+		<config-file target="AndroidManifest.xml" parent="/*">
+			<uses-permission android:name="android.permission.BLUETOOTH"/>
+			<uses-permission android:name="android.permission.INTERNET"/>
+			<uses-permission android:name="android.permission.WAKE_LOCK" />
+			<uses-permission android:name="android.permission.GET_ACCOUNTS" />
+			<uses-permission android:name="android.permission.USE_CREDENTIALS" />
+			<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+			<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    	</config-file>
+		
+		<!--Broadcast Receiver-->
+		<config-file target="AndroidManifest.xml" parent="/manifest/application">
+			
+			
+			<!--<service android:name="com.onyxbeacon.service.OnyxBeaconService"
+             android:exported="false"/>-->
+            <activity android:name="com.sparta.onyxbeacon.TransparentActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar" android:launchMode="singleTask"/>
+			<activity android:name="com.sparta.onyxbeacon.NotificationHandler"/>
+            <receiver android:name="com.sparta.onyxbeacon.ContentReceiver">
+				<intent-filter>
+					<action android:name="com.sparta.onyxbeacon.content" />
+				</intent-filter>
+			</receiver>
+			<receiver android:name="com.sparta.onyxbeacon.BleStateReceiver">
+				<intent-filter>
+					<action android:name="com.sparta.onyxbeacon.scan" />
+				</intent-filter>
+			</receiver>
+			
+<!-- 			<provider
+				android:authorities="com.sparta.onyxbeacon.provider"
+				android:name="com.onyxbeaconservice.provider.IBeaconProvider"
+				android:enabled="true"
+				android:exported="true"></provider> -->
+        </config-file>
+		
+		<framework src="plugin/src/android/onyxbeacon.gradle" custom="true" type="gradleReference" />
+		
+		<source-file src="plugin/src/android/OnyxBeaconLibrary-release.aar" target-dir="libs" />
+<!--         <source-file src="plugin/src/android/realm-android-0.86.0.jar" target-dir="libs"/> -->
+		<source-file src="plugin/src/android/retrofit-1.9.0.jar" target-dir="libs"/>
+		
+		<source-file src="plugin/src/android/java/OnyxbeaconPhonegap.java" target-dir="src/com/sparta/onyxbeacon" />
+        <source-file src="plugin/src/android/java/TransparentActivity.java" target-dir="src/com/sparta/onyxbeacon" />
+        <source-file src="plugin/src/android/java/NotificationHandler.java" target-dir="src/com/sparta/onyxbeacon" />
+        <source-file src="plugin/src/android/java/ContentReceiver.java" target-dir="src/com/sparta/onyxbeacon" />
+        <source-file src="plugin/src/android/java/BleStateReceiver.java" target-dir="src/com/sparta/onyxbeacon" />
+        <source-file src="plugin/src/android/layout/notification.xml" target-dir="res/layout" />
+<!--         <source-file src="plugin/src/android/drawable/notify_icon.png" target-dir="res/drawable" /> -->
+		
+	</platform>
+	
+	<platform name="ios">
+		<framework src="plugin/src/frameworks/OnyxBeaconLib.framework" custom="true" />
+
+		<config-file target="config.xml" parent="/*">
+			<feature name="OnyxbeaconPhonegap">
+				<param name="ios-package" value="OnyxbeaconPhonegap"/>
+			</feature>
+		</config-file>
+		
+		<header-file src="plugin/src/ios/AFOAuth2Client.h" />
+		<source-file src="plugin/src/ios/AFOAuth2Client.m" />
+		<header-file src="plugin/src/ios/OnyxbeaconPhonegap.h" />
+		<source-file src="plugin/src/ios/OnyxbeaconPhonegap.m" />
+		<header-file src="plugin/src/ios/AppDelegate+notification.h" />
+		<source-file src="plugin/src/ios/AppDelegate+notification.m" />
+
+		<dependency id="cordova-plugin-afnetworking" />
+	</platform>
+
+</plugin>	

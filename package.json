@@ -1,0 +1,29 @@
+{
+  "name": "cordova-plugin-onyxbeacon",
+  "version": "0.1.25",
+  "description": "Phonegap/Cordova Plugin for OnyxBeacon",
+  "cordova": {
+    "id": "cordova-plugin-onyxbeacon",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://bitbucket.org/spartadigital/onyxbeacon-phonegap.git"
+  },
+  "keywords": [
+    "Onyx",
+    "Beacons",
+    "ecosystem:cordova",
+    "cordova-android",
+    "cordova-ios"
+  ],
+  "author": "Sparta",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://bitbucket.org/spartadigital/onyxbeacon-phonegap/issues"
+  },
+  "homepage": "https://bitbucket.org/spartadigital/onyxbeacon-phonegap"
+}
