@@ -2,6 +2,7 @@
 #import "OnyxbeaconPhonegap.h"
 #import <OnyxBeaconLib/OnyxBeacon.h>
 #import <AFNetworking/AFNetworking.h>
+#import <SafariServices/SafariServices.h>
 
 
 #define SA_CLIENTID @"430af915ede1e38d26a55d41d559279a4a6d4fe9"
@@ -146,7 +147,9 @@
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
     // the user clicked OK
     if (buttonIndex == 1) {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:self.url]];
+        SFSafariViewController *sfvc = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:self.url]];
+        sfvc.delegate = self;
+        [self.viewController presentViewController:sfvc animated:YES completion:nil];
     }
 }
 
