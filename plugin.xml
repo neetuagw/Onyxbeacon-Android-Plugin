@@ -13,6 +13,9 @@
 		<clobbers target="OnyxbeaconPhonegap" />
 	</js-module>
 	
+	<preference name="SA_CLIENTID" />
+        <preference name="SA_SECRET" />
+	
 	<platform name="android">
 		<!-- android-specific elements -->
 		

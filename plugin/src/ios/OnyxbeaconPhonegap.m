@@ -4,10 +4,6 @@
 #import <AFNetworking/AFNetworking.h>
 #import <SafariServices/SafariServices.h>
 
-
-#define SA_CLIENTID @"430af915ede1e38d26a55d41d559279a4a6d4fe9"
-#define SA_SECRET   @"898b52e410d444a9f854ecf76b586fecc560ff2d"
-
 @interface OnyxbeaconPhonegap ()
 
 @property (nonatomic, strong) NSArray *coupons;
@@ -25,13 +21,21 @@
 
 @implementation OnyxbeaconPhonegap
 
+- (void)showSafari:(NSString *)url {
+    SFSafariViewController *sfvc = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:url]];
+    sfvc.delegate = self;
+    [self.viewController presentViewController:sfvc
+        animated:YES
+        completion:nil
+    ];
+}
+
 #pragma mark - Plugin calls
 
 - (void)initialiseSDK:(CDVInvokedUrlCommand*)command {
     /*[[OnyxBeacon sharedInstance] setLogger:^(NSString *message) {
         NSLog(@"OnyxBeacon: %@", message);
     }];*/
-
 
     // Permissions
         if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) {
@@ -44,8 +48,11 @@
     [[UIApplication sharedApplication] registerForRemoteNotifications];
 
     // Onyx
+    NSString* clientid = [command.arguments objectAtIndex:0];
+    NSString* secret = [command.arguments objectAtIndex:1];
+
     [[OnyxBeacon sharedInstance] requestAlwaysAuthorization];
-    [[OnyxBeacon sharedInstance] startServiceWithClientID:SA_CLIENTID secret:SA_SECRET];
+    [[OnyxBeacon sharedInstance] startServiceWithClientID:clientid secret:secret];
     [[OnyxBeacon sharedInstance] setDelegate:self];
     [[OnyxBeacon sharedInstance] setContentDelegate:self];
     self.com = command;
@@ -60,18 +67,22 @@
 
 - (void)startRanging:(CDVInvokedUrlCommand*)command {
      CDVPluginResult* pluginResult = nil;
-     NSDictionary *returnBeacon = nil;
+     NSDictionary *beacon = nil;
+     NSMutableArray *allBeacons = nil;
 
      for (OBBeacon *b in self.rangedBeacons) {
-        returnBeacon = [NSDictionary dictionaryWithObjectsAndKeys:
+        beacon = [NSDictionary dictionaryWithObjectsAndKeys:
             b.uuid ? [b.uuid UUIDString] : @"", @"uuid",
             b.major ? [NSNumber numberWithInt:b.major] : @"", @"major",
             b.minor ? [NSNumber numberWithInt:b.minor] : @"", @"minor",
             nil
         ];
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:returnBeacon];
-        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+
+        [allBeacons addObject:beacon];
      }
+
+     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:allBeacons];
+     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 
@@ -89,7 +100,6 @@
     NSArray *coupons = [[OnyxBeacon sharedInstance] getContent];
     for (OBContent *coupon in coupons) {
         if (coupon.contentState == ContentStateUnread) {
-
             returnCoupon = [NSDictionary dictionaryWithObjectsAndKeys:
                 coupon.action ? [NSString stringWithString:coupon.action] : @"", @"action",
                 coupon.contentState ? [NSNumber numberWithInt:coupon.contentState] : @"0", @"contentState",
@@ -113,7 +123,6 @@
 
             UIApplicationState state = [[UIApplication sharedApplication] applicationState];
             if (state == UIApplicationStateActive) {
-
                 if ([returnCoupon objectForKey:@"action"] == @"") {
                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:coupon.title
                                                                     message:coupon.message
@@ -145,11 +154,8 @@
 
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    // the user clicked OK
-    if (buttonIndex == 1) {
-        SFSafariViewController *sfvc = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:self.url]];
-        sfvc.delegate = self;
-        [self.viewController presentViewController:sfvc animated:YES completion:nil];
+    if (buttonIndex == 1) { // the user clicked OK
+        [self showSafari:self.url];
     }
 }
 

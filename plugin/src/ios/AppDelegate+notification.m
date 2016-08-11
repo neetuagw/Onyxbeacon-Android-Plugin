@@ -26,20 +26,25 @@
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    [[OnyxBeacon sharedInstance] didEnterBackground];
+    //[[OnyxBeacon sharedInstance] didEnterBackground];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
-    [[OnyxBeacon sharedInstance] willEnterForeground];
+    //[[OnyxBeacon sharedInstance] willEnterForeground];
 }
 
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
     if ([application applicationState] == UIApplicationStateInactive) {
-        SFSafariViewController *sfvc = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:[notification.userInfo objectForKey:@"url"]]];
+        NSString *url = [notification.userInfo objectForKey:@"url"];
+
+        SFSafariViewController *sfvc = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:url]];
         sfvc.delegate = self;
-        [self.viewController presentViewController:sfvc animated:YES completion:nil];
+        [self.viewController presentViewController:sfvc
+            animated:YES
+            completion:nil
+        ];
     }
 }
 
