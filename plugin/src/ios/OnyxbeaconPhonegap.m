@@ -48,8 +48,8 @@
     [[UIApplication sharedApplication] registerForRemoteNotifications];
 
     // Onyx
-    NSString* clientid = [command.arguments objectAtIndex:0];
-    NSString* secret = [command.arguments objectAtIndex:1];
+    NSString* clientid = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"SAClientId"];
+    NSString* secret = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"SASecret"];
 
     [[OnyxBeacon sharedInstance] requestAlwaysAuthorization];
     [[OnyxBeacon sharedInstance] startServiceWithClientID:clientid secret:secret];

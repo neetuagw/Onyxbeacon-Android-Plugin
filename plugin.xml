@@ -54,6 +54,8 @@
 					<action android:name="com.sparta.onyxbeacon.scan" />
 				</intent-filter>
 			</receiver>
+			<meta-data android:name="clientid" android:value="$SA_CLIENTID" />
+                        <meta-data android:name="secret" android:value="$SA_SECRET" />
 			
 <!-- 			<provider
 				android:authorities="com.sparta.onyxbeacon.provider"
@@ -79,22 +81,30 @@
 	</platform>
 	
 	<platform name="ios">
-		<framework src="plugin/src/frameworks/OnyxBeaconLib.framework" custom="true" />
+                <framework src="plugin/src/frameworks/OnyxBeaconLib.framework" custom="true"/>
 
-		<config-file target="config.xml" parent="/*">
-			<feature name="OnyxbeaconPhonegap">
-				<param name="ios-package" value="OnyxbeaconPhonegap"/>
-			</feature>
-		</config-file>
-		
-		<header-file src="plugin/src/ios/AFOAuth2Client.h" />
-		<source-file src="plugin/src/ios/AFOAuth2Client.m" />
-		<header-file src="plugin/src/ios/OnyxbeaconPhonegap.h" />
-		<source-file src="plugin/src/ios/OnyxbeaconPhonegap.m" />
-		<header-file src="plugin/src/ios/AppDelegate+notification.h" />
-		<source-file src="plugin/src/ios/AppDelegate+notification.m" />
+                <config-file target="*-Info.plist" parent="SAClientId">
+                    <string>$SA_CLIENTID</string>
+                </config-file>
 
-		<dependency id="cordova-plugin-afnetworking" />
-	</platform>
+                <config-file target="*-Info.plist" parent="SASecret">
+                    <string>$SA_SECRET</string>
+                </config-file>
+
+                <config-file target="config.xml" parent="/*">
+                    <feature name="OnyxbeaconPhonegap">
+                        <param name="ios-package" value="OnyxbeaconPhonegap"/>
+                    </feature>
+                </config-file>
+
+                <header-file src="plugin/src/ios/AFOAuth2Client.h"/>
+                <source-file src="plugin/src/ios/AFOAuth2Client.m"/>
+                <header-file src="plugin/src/ios/OnyxbeaconPhonegap.h"/>
+                <source-file src="plugin/src/ios/OnyxbeaconPhonegap.m"/>
+                <header-file src="plugin/src/ios/AppDelegate+notification.h"/>
+                <source-file src="plugin/src/ios/AppDelegate+notification.m"/>
+
+                <dependency id="cordova-plugin-afnetworking"/>
+        </platform>
 
 </plugin>	
