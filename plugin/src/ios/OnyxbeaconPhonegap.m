@@ -69,6 +69,7 @@
      CDVPluginResult* pluginResult = nil;
      NSDictionary *beacon = nil;
      NSMutableArray *allBeacons = nil;
+     allBeacons = [[NSMutableArray alloc] init];
 
      for (OBBeacon *b in self.rangedBeacons) {
         beacon = [NSDictionary dictionaryWithObjectsAndKeys:
