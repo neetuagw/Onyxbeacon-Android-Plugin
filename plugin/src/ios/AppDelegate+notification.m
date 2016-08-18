@@ -39,12 +39,15 @@
     if ([application applicationState] == UIApplicationStateInactive) {
         NSString *url = [notification.userInfo objectForKey:@"url"];
 
-        SFSafariViewController *sfvc = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:url]];
-        sfvc.delegate = self;
-        [self.viewController presentViewController:sfvc
-            animated:YES
-            completion:nil
-        ];
+        if (![url isEqual: @""]) {
+            SFSafariViewController *sfvc = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:url]];
+            sfvc.delegate = self;
+            [self.viewController presentViewController:sfvc
+                animated:YES
+                completion:nil
+            ];
+        }
+
     }
 }
 

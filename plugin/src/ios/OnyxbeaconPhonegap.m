@@ -14,8 +14,9 @@
 @property (nonatomic, strong) CDVInvokedUrlCommand *com;
 
 @property (nonatomic, strong) CBCentralManager *bluetoothManager;
-@property (nonatomic, strong) NSArray *rangedBeacons;
+@property (nonatomic, strong) NSMutableArray *rangedBeacons;
 @property (nonatomic, strong) NSString *url;
+@property (nonatomic, strong) NSString *couponCallbackId;
 
 @end
 
@@ -56,6 +57,8 @@
     [[OnyxBeacon sharedInstance] setDelegate:self];
     [[OnyxBeacon sharedInstance] setContentDelegate:self];
     self.com = command;
+    self.couponCallbackId = self.com.callbackId;
+    self.rangedBeacons = [[NSMutableArray alloc] init];
 }
 
 - (void)checkbluetoothState:(CDVInvokedUrlCommand*)command {
@@ -67,22 +70,8 @@
 
 - (void)startRanging:(CDVInvokedUrlCommand*)command {
      CDVPluginResult* pluginResult = nil;
-     NSDictionary *beacon = nil;
-     NSMutableArray *allBeacons = nil;
-     allBeacons = [[NSMutableArray alloc] init];
 
-     for (OBBeacon *b in self.rangedBeacons) {
-        beacon = [NSDictionary dictionaryWithObjectsAndKeys:
-            b.uuid ? [b.uuid UUIDString] : @"", @"uuid",
-            b.major ? [NSNumber numberWithInt:b.major] : @"", @"major",
-            b.minor ? [NSNumber numberWithInt:b.minor] : @"", @"minor",
-            nil
-        ];
-
-        [allBeacons addObject:beacon];
-     }
-
-     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:allBeacons];
+     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:self.rangedBeacons];
      [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
@@ -145,12 +134,30 @@
 
     [[OnyxBeacon sharedInstance] clearCoupons];
 
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:returnCoupon];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:self.com.callbackId];
+    if (self.couponCallbackId) {
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:returnCoupon];
+        [pluginResult setKeepCallback:[NSNumber numberWithBool:YES]];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:self.couponCallbackId];
+    } else {
+        self.couponCallbackId = self.com.callbackId;
+    }
 }
 
 - (void)didRangeBeacons:(NSArray *)beacons inRegion:(OBBeaconRegion *)region {
-    self.rangedBeacons = beacons;
+     NSDictionary *beacon = nil;
+
+     for (OBBeacon *b in beacons) {
+        beacon = [NSDictionary dictionaryWithObjectsAndKeys:
+            b.uuid ? [b.uuid UUIDString] : @"", @"uuid",
+            b.major ? [NSNumber numberWithInt:b.major] : @"", @"major",
+            b.minor ? [NSNumber numberWithInt:b.minor] : @"", @"minor",
+            nil
+        ];
+
+         if (![self.rangedBeacons containsObject:beacon]) {
+             [self.rangedBeacons addObject:beacon];
+         }
+     }
 }
 
 
@@ -179,8 +186,10 @@
     }
 
     NSLog(state ? @"BT? Yes" : @"BT? No");
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:state];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:self.com.callbackId];
+    if (self.com.callbackId) {
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:state];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:self.com.callbackId];
+    }
 
 }
 
