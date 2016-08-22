@@ -149,8 +149,8 @@
      for (OBBeacon *b in beacons) {
         beacon = [NSDictionary dictionaryWithObjectsAndKeys:
             b.uuid ? [b.uuid UUIDString] : @"", @"uuid",
-            b.major ? [NSNumber numberWithInt:b.major] : @"", @"major",
-            b.minor ? [NSNumber numberWithInt:b.minor] : @"", @"minor",
+            b.major ? b.major : @"", @"major",
+            b.minor ? b.minor : @"", @"minor",
             nil
         ];
 
