@@ -29,25 +29,18 @@ OnyxbeaconPhonegap.prototype.bluetoothState = function(success , error){
     exec(success,error,'OnyxbeaconPhonegap','checkbluetoothState',[]);
 };
 
-//Range Beacons
-OnyxbeaconPhonegap.prototype.rangeBeacon = function(success , error){
-    var success = function(info) {
-        console.log("Successfully Received Beacons List", info);
-        cordova.fireDocumentEvent('beaconsReceived', info);
-    };
-
-    var error = function(error) {
-        console.error(error);
-    };
-
-// On receive list of beacons around device send a callback with a list of beacons data. Read more about Callback in Phonegap Plugin documentation
-
-    exec(success,error,'OnyxbeaconPhonegap','startRanging',[]);
+/** Range Beacons 
+ * @returns {Promise} - a promise with a beacons array. 
+**/
+OnyxbeaconPhonegap.prototype.rangeBeacon = function() {
+    return new Promise(function(resolve, reject) {
+        exec(resolve,reject,'OnyxbeaconPhonegap','startRanging',[]);
+    })
 };
 
 
 var onyxbeaconPhonegap = new OnyxbeaconPhonegap();
-
+window.onyxbeacon = onyxbeacon;
 
 // Export module.
 module.exports = onyxbeaconPhonegap;
