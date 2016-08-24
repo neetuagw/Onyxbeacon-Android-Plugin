@@ -39,8 +39,8 @@ OnyxbeaconPhonegap.prototype.rangeBeacon = function() {
 };
 
 
-var onyxbeaconPhonegap = new OnyxbeaconPhonegap();
+var onyxbeacon = new OnyxbeaconPhonegap();
 window.onyxbeacon = onyxbeacon;
 
 // Export module.
-module.exports = onyxbeaconPhonegap;
+module.exports = onyxbeacon;
