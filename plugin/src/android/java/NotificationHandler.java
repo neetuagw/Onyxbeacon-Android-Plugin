@@ -79,12 +79,6 @@ public class NotificationHandler extends TransparentActivity{
         
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        
-        //type = (TextView)findViewById(resources.getIdentifier("couponType" , "id" , package_name));
-        //couponImage = (ImageView)findViewById(resources.getIdentifier("couponImage" , "id" , package_name));
-        //Get webview 
-        //webView = (WebView) findViewById(resources.getIdentifier("webView1" , "id" , package_name));
-        //openApp = (Button)findViewById(resources.getIdentifier("openApp" , "id" , package_name));
         boolean foreground = OnyxbeaconPhonegap.isInForeground();
         boolean isOnyxbeaconActive = OnyxbeaconPhonegap.isActive();
         
@@ -100,12 +94,17 @@ public class NotificationHandler extends TransparentActivity{
             
             actionBar.setTitle((CharSequence)coupon.name);
             
-            Bundle extras = new Bundle();
-            extras.putParcelable("coupon_value", (Parcelable)coupon);
-            //Bundle extras = getIntent().getBundleExtra("coupon_object");
-            OnyxbeaconPhonegap.sendExtras(extras);
-            
-            if(coupon.type == 1){
+            if( coupon.type == 0 || coupon.type == 3) {
+                Bundle extras = new Bundle();
+                extras.putString("coupon_value", coupon.name);
+                OnyxbeaconPhonegap.sendExtras(extras);
+           
+                //Deleting received coupon
+                onyxManager.deleteCoupon(coupon.couponId, coupon.beaconId);
+                
+                forceMainActivityReload();
+
+            }else if(coupon.type == 1){
                 setContentView(resources.getIdentifier("notification" , "layout" , package_name));
                 couponImage = (ImageView)findViewById(resources.getIdentifier("couponImage" , "id" , package_name));
                 couponImage.setVisibility(View.VISIBLE);
@@ -120,108 +119,36 @@ public class NotificationHandler extends TransparentActivity{
                 progressDialog.dismiss();
                 
             }else if(coupon.type == 2){
-                //webView.setVisibility(View.VISIBLE);
-                mCouponWebView = new WebView(this); 
+            
+                Bundle extras = new Bundle();
+                extras.putString("coupon_value", coupon.name);
+                OnyxbeaconPhonegap.sendExtras(extras);
+           
+                //Deleting received coupon
+                onyxManager.deleteCoupon(coupon.couponId, coupon.beaconId);
+                
+                forceMainActivityReload();
+                
+                /*mCouponWebView = new WebView(this); 
                 mCouponWebView.setWebViewClient(new WebViewClient()); 
                 mCouponWebView.setWebChromeClient(new WebChromeClient()); 
                 mCouponWebView.getSettings().setJavaScriptEnabled(true); 
                 setContentView(mCouponWebView, new android.view.ViewGroup.LayoutParams(-1, -1)); 
                 mCouponWebView.loadUrl(coupon.couponURL);
-               	//startWebView("http://buzzinapp.com/htmlContent/1.html");
                 
-                progressDialog.dismiss();
+                progressDialog.dismiss();*/
             }
             
             //Deleting received coupon
             onyxManager.deleteCoupon(coupon.couponId, coupon.beaconId);
         }
         
-        //forceMainActivityReload();
-        
-        // if (!isOnyxbeaconActive && foreground) {
-        //     Log.d("NotificationHandler", "forceMainActivityReload");
-        //     forceMainActivityReload();
-        // } else {
-        //     Log.d("NotificationHandler", "don't want main activity");
-        // }
-        
-	}
-    
-    
-   private void startWebView(String url) {
-         
-        //Create new webview Client to show progress dialog
-        //When opening a url or click on link
-         
-        webView.setWebViewClient(new WebViewClient() {      
-            ProgressDialog progressDialog;
-          
-            //If you will not use this method url links are opeen in new brower not in webview
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {              
-                view.loadUrl(url);
-                return true;
-            }
-        
-            //Show loader on url load
-            public void onLoadResource (WebView view, String url) {
-                if (progressDialog == null) {
-                    // in standard case YourActivity.this
-                    progressDialog = new ProgressDialog(NotificationHandler.this);
-                    progressDialog.setMessage("Loading...");
-                    progressDialog.show();
-                }
-            }
-            public void onPageFinished(WebView view, String url) {
-                try{
-                if (progressDialog.isShowing()) {
-                    progressDialog.dismiss();
-                    progressDialog = null;
-                }
-                }catch(Exception exception){
-                    exception.printStackTrace();
-                }
-            }
-             
-        }); 
-          
-         // Javascript inabled on webview  
-        webView.getSettings().setJavaScriptEnabled(true); 
-         
-        // Other webview options
-        /*
-        webView.getSettings().setLoadWithOverviewMode(true);
-        webView.getSettings().setUseWideViewPort(true);
-        webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
-        webView.setScrollbarFadingEnabled(false);
-        webView.getSettings().setBuiltInZoomControls(true);
-        */
-         
-        /*
-         String summary = "<html><body>You scored <b>192</b> points.</body></html>";
-         webview.loadData(summary, "text/html", null); 
-         */
-         
-        //Load url in webview
-        webView.loadUrl(url);
-
-    }
+}
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                // app icon in action bar clicked; go home
-                // try{
-                //     PackageManager pm = getApplicationContext().getPackageManager();
-                // Intent launchIntent = pm.getLaunchIntentForPackage(getApplicationContext().getPackageName()); 
-                // 	String className = launchIntent.getComponent().getClassName();
-                // Class cl = Class.forName(className); 
-                // 	Intent newIntent = new Intent(NotificationHandler.this, cl);
-                //     newIntent.putExtra("extras" , "I am getting it");
-                // startActivity(newIntent);
-                // }catch(ClassNotFoundException e){
-                //    e.printStackTrace(); 
-                // }
             	Bundle extras = new Bundle();
             	extras.putParcelable("coupon_value", (Parcelable)coupon);
             	//Bundle extras = getIntent().getBundleExtra("coupon_object");
@@ -240,6 +167,7 @@ public class NotificationHandler extends TransparentActivity{
      */
     private void forceMainActivityReload() {
         Log.e("forceMainActivityReload" , "Thats been called ");
+        NotificationHandler.this.finish();
         try{
             PackageManager pm = getApplicationContext().getPackageManager();
         	Intent launchIntent = pm.getLaunchIntentForPackage(getApplicationContext().getPackageName()); 
@@ -247,7 +175,7 @@ public class NotificationHandler extends TransparentActivity{
             Class cl = Class.forName(className); 
             Intent newIntent = new Intent(NotificationHandler.this, cl);
         	startActivity(launchIntent);
-        }catch(ClassNotFoundException e){
+        } catch ( ClassNotFoundException e){
             e.printStackTrace(); 
         }
     }
@@ -255,18 +183,6 @@ public class NotificationHandler extends TransparentActivity{
     @Override
     // Detect when the back button is pressed
     public void onBackPressed() {
-        
-        // try{
-        //     PackageManager pm = getApplicationContext().getPackageManager();
-        // 	Intent launchIntent = pm.getLaunchIntentForPackage(getApplicationContext().getPackageName()); 
-        //     String className = launchIntent.getComponent().getClassName();
-        //     Class cl = Class.forName(className); 
-        //     Intent newIntent = new Intent(NotificationHandler.this, cl);
-        //     newIntent.putExtra("extras" , "I am getting it");
-        // 	startActivity(newIntent);
-        // }catch(ClassNotFoundException e){
-        //     e.printStackTrace(); 
-        // }
         super.onBackPressed();
     }
     

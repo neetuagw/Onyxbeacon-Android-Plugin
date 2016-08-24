@@ -37,7 +37,7 @@
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
     if ([application applicationState] == UIApplicationStateInactive) {
-        NSString *url = [notification.userInfo objectForKey:@"url"];
+        /*NSString *url = [notification.userInfo objectForKey:@"url"];
 
         if (![url isEqual: @""]) {
             SFSafariViewController *sfvc = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:url]];
@@ -46,7 +46,7 @@
                 animated:YES
                 completion:nil
             ];
-        }
+        }*/
 
     }
 }

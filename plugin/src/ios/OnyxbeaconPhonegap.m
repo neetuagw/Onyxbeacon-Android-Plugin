@@ -114,19 +114,19 @@
             UIApplicationState state = [[UIApplication sharedApplication] applicationState];
             if (state == UIApplicationStateActive) {
                 if ([returnCoupon objectForKey:@"action"] == @"") {
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:coupon.title
+                    /*UIAlertView *alert = [[UIAlertView alloc] initWithTitle:coupon.title
                                                                     message:coupon.message
                                                                    delegate:self
                                                                    cancelButtonTitle:@"Close"
                                                                     otherButtonTitles:nil];
-                    [alert show];
+                    [alert show];*/
                 } else {
                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:coupon.title
                                                                     message:coupon.message
                                                                    delegate:self
                                                                    cancelButtonTitle:@"Close"
                                                                     otherButtonTitles:@"View", nil];
-                    [alert show];
+                    //[alert show];
                 }
             }
         }
