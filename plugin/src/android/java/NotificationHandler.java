@@ -120,9 +120,9 @@ public class NotificationHandler extends TransparentActivity{
                 
             }else if(coupon.type == 2){
             
-                Bundle extras = new Bundle();
-                extras.putString("coupon_value", coupon.name);
-                OnyxbeaconPhonegap.sendExtras(extras);
+                Bundle extras2 = new Bundle();
+                extras2.putString("coupon_value", coupon.name);
+                OnyxbeaconPhonegap.sendExtras(extras2);
            
                 //Deleting received coupon
                 onyxManager.deleteCoupon(coupon.couponId, coupon.beaconId);
