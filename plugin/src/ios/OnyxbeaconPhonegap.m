@@ -99,7 +99,7 @@
                 coupon.title ? [NSString stringWithString:coupon.title] : @"", @"title",
                 coupon.path ? [NSString stringWithString:coupon.path] : @"", @"path",
                 coupon.message ? [NSString stringWithString:coupon.message] : @"", @"message",
-                coupon.description ? [NSString stringWithString:coupon.description] : @"", @"description",
+                coupon.description ? [NSString stringWithString:coupon.couponDescription] : @"", @"couponDescription",
                 coupon.uuid ? [NSNumber numberWithInt:coupon.uuid] : @"", @"uuid",
                 nil
             ];

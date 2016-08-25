@@ -44,6 +44,8 @@ import android.webkit.*;
 import com.android.volley.toolbox.NetworkImageView;
 
 import android.os.Parcelable;
+import org.json.JSONObject;
+import org.json.JSONException;
 
 public class NotificationHandler extends TransparentActivity{
     private OnyxBeaconManager onyxManager;
@@ -94,49 +96,23 @@ public class NotificationHandler extends TransparentActivity{
             
             actionBar.setTitle((CharSequence)coupon.name);
             
-            if( coupon.type == 0 || coupon.type == 3) {
-                Bundle extras = new Bundle();
-                extras.putString("coupon_value", coupon.name);
-                OnyxbeaconPhonegap.sendExtras(extras);
-           
-                //Deleting received coupon
-                onyxManager.deleteCoupon(coupon.couponId, coupon.beaconId);
+            try{
+                JSONObject obj = new JSONObject();
+                obj.put("action",coupon.couponURL);
+                obj.put("image",coupon.image);
+                obj.put("contentState","");
+                obj.put("contentType",coupon.type);
+                obj.put("createTime","");
+                obj.put("description",coupon.description);
+                obj.put("expirationDate","");
+                obj.put("title",coupon.name);
+                obj.put("path","");
+                obj.put("message",coupon.message);
+                obj.put("uuid","");
                 
-                forceMainActivityReload();
-
-            }else if(coupon.type == 1){
-                setContentView(resources.getIdentifier("notification" , "layout" , package_name));
-                couponImage = (ImageView)findViewById(resources.getIdentifier("couponImage" , "id" , package_name));
-                couponImage.setVisibility(View.VISIBLE);
-                try{
-                    URL url = new URL(coupon.image);
-                	Bitmap bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                	couponImage.setImageBitmap(bitmap);
-                }catch(IOException e){
-                    e.printStackTrace();
-                }
+                OnyxbeaconPhonegap.sendEvent(obj);
+            }catch(JSONException e){
                 
-                progressDialog.dismiss();
-                
-            }else if(coupon.type == 2){
-            
-                Bundle extras2 = new Bundle();
-                extras2.putString("coupon_value", coupon.name);
-                OnyxbeaconPhonegap.sendExtras(extras2);
-           
-                //Deleting received coupon
-                onyxManager.deleteCoupon(coupon.couponId, coupon.beaconId);
-                
-                forceMainActivityReload();
-                
-                /*mCouponWebView = new WebView(this); 
-                mCouponWebView.setWebViewClient(new WebViewClient()); 
-                mCouponWebView.setWebChromeClient(new WebChromeClient()); 
-                mCouponWebView.getSettings().setJavaScriptEnabled(true); 
-                setContentView(mCouponWebView, new android.view.ViewGroup.LayoutParams(-1, -1)); 
-                mCouponWebView.loadUrl(coupon.couponURL);
-                
-                progressDialog.dismiss();*/
             }
             
             //Deleting received coupon
