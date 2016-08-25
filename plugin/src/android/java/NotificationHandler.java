@@ -117,6 +117,8 @@ public class NotificationHandler extends TransparentActivity{
             
             //Deleting received coupon
             onyxManager.deleteCoupon(coupon.couponId, coupon.beaconId);
+            
+            forceMainActivityReload();
         }
         
 }
