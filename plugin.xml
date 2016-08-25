@@ -105,6 +105,11 @@
                 <source-file src="plugin/src/ios/AppDelegate+notification.m"/>
 
                 <dependency id="cordova-plugin-afnetworking"/>
+                
+                <config-file target="*-Info.plist" parent="NSLocationAlwaysUsageDescription">
+                        <string>This is required for iBeacon experience</string>
+                </config-file>
+    
         </platform>
 
 </plugin>	
