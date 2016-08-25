@@ -27,6 +27,7 @@ typedef NS_ENUM(NSInteger, ContentState) {
 @property (nonatomic, strong, readonly) NSString *title;
 @property (nonatomic, strong, readonly) NSNumber *uuid;
 @property (nonatomic, strong, readonly) NSString *message;
+@property (nonatomic, strong, readonly) NSString *couponDescription;
 
 @property (nonatomic, strong, readonly) NSString *path;
 @property (nonatomic, strong, readonly) NSString *action;
