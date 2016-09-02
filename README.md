@@ -16,6 +16,13 @@ cordova plugin add https://bitbucket.org/spartadigital/onyx-cordovaplugin.git --
 
 1. Check Bluetooth State
 
+```
+#!python
+
+
+onyxbeacon.bluetoothState(function(){//success}, function(){//error});
+```
+
 
 2. Receive content on click notification:
 Call following function on device ready
