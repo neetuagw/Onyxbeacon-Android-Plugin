@@ -4,8 +4,8 @@ This plugin specifically developed for hybrid applications. Once a beacon is in 
 
 ## **Supported Platforms** ## 
 
-1. iOS 
-2. Android
+**1. iOS** 
+**2. Android**
 
 ## **Installation** ##
 
