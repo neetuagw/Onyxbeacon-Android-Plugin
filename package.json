@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-onyxbeacon",
-  "version": "0.1.25",
+  "version": "1.9.1",
   "description": "Phonegap/Cordova Plugin for OnyxBeacon",
   "cordova": {
     "id": "cordova-plugin-onyxbeacon",
@@ -21,7 +21,7 @@
     "cordova-ios"
   ],
   "author": "Sparta",
-  "license": "MIT",
+  "license": "Onyx Cordova Plugin",
   "bugs": {
     "url": "https://bitbucket.org/spartadigital/onyxbeacon-phonegap/issues"
   },
