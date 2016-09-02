@@ -4,11 +4,14 @@ This plugin specifically developed for hybrid applications. Once a beacon is in 
 
 ## **Installation** ##
 
-You need to provide your application ClientID and Secret key ( Onyx provides the ClientID and Secret key on register your application in their backend.) as a variable while installing the plugin. You can install the plugin in following way:
+To use this plugin you need to make sure that you have registered your application to Onyx CMS and received ClientID and Secret key. You need to provide ClientId and Secret Key as a variable while installing the plugin. You can install the plugin in following way:
 
 
 ```
 #!python
 
-$ cordova plugin add cordova-plugin-facebook4 --save --variable APP_ID="123456789" --variable APP_NAME="myApplication"
+cordova plugin add https://bitbucket.org/spartadigital/onyx-cordovaplugin.git --save --variable APP_ID="123456789" --variable APP_NAME="myApplication"
 ```
+## **Methods** ##
+
+1. Receive content on click notification:
