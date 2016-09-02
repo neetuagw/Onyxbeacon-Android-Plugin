@@ -2,6 +2,11 @@
 
 This plugin specifically developed for hybrid applications. Once a beacon is in range it will fire an event with a beacon content and also sends notification.
 
+## **Supported Platforms** ## 
+
+**1. iOS 
+2. Android**
+
 ## **Installation** ##
 
 To use this plugin you need to make sure that you have registered your application to Onyx CMS and received ClientID and Secret key. You need to provide ClientId and Secret Key as a variable while installing the plugin. You can install the plugin in following way:
