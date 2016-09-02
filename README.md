@@ -34,7 +34,7 @@ onyxbeacon.bluetoothState(function(){//success}, function(){//error});
 Call following function on device ready
 
 ```
-#java
+#!java
 document.addEventListener('notificationReceived', function(info) {
     console.log("Content", info);
     var title = info.title, 
