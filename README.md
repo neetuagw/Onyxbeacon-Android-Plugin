@@ -14,13 +14,21 @@ cordova plugin add https://bitbucket.org/spartadigital/onyx-cordovaplugin.git --
 ```
 ## **Methods** ##
 
-1. Receive content on click notification:
+1. Check Bluetooth State
+
+
+2. Receive content on click notification:
 Call following function on device ready
 
 ```
 #!python
 document.addEventListener('notificationReceived', function(info) {
     console.log("Content", info);
+    var title = info.title, 
+    message  = info.message ? info.message : '', 
+    dealid   = info.description ? info.description.trim(): '',
+    dealUrl  = info.action ? encodeURI( info.action ) : '',
+    type     = info.contentType ? info.contentType : 0;
 }
 
 ```
