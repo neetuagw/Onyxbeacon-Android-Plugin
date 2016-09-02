@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-onyxbeacon",
-  "version": "1.9.1",
+  "version": "2.0.0",
   "description": "Phonegap/Cordova Plugin for OnyxBeacon",
   "cordova": {
     "id": "cordova-plugin-onyxbeacon",
