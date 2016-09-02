@@ -32,3 +32,14 @@ document.addEventListener('notificationReceived', function(info) {
 }
 
 ```
+
+3. Range list of beacons around [Only for IOS]
+
+
+```
+#!python
+
+
+onyxbeacon.rangeBeacons().then(function(info) { //success }, function(e) { //err });
+
+```
