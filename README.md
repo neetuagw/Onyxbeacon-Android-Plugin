@@ -23,7 +23,7 @@ cordova plugin add https://bitbucket.org/spartadigital/onyx-cordovaplugin.git --
 1. Check Bluetooth State
 
 ```
-#!java
+#!python
 
 
 onyxbeacon.bluetoothState(function(){//success}, function(){//error});
