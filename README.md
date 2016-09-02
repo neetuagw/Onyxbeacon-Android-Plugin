@@ -23,7 +23,7 @@ cordova plugin add https://bitbucket.org/spartadigital/onyx-cordovaplugin.git --
 1. Check Bluetooth State
 
 ```
-#!python
+#!java
 
 
 onyxbeacon.bluetoothState(function(){//success}, function(){//error});
@@ -34,7 +34,7 @@ onyxbeacon.bluetoothState(function(){//success}, function(){//error});
 Call following function on device ready
 
 ```
-#!python
+#java
 document.addEventListener('notificationReceived', function(info) {
     console.log("Content", info);
     var title = info.title, 
