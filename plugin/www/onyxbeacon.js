@@ -31,6 +31,7 @@ OnyxbeaconPhonegap.prototype.bluetoothState = function(success , error){
 
 /** Range Beacons 
  * @returns {Promise} - a promise with a beacons array. 
+ * IOS ONLY
 **/
 OnyxbeaconPhonegap.prototype.rangeBeacon = function() {
     return new Promise(function(resolve, reject) {
