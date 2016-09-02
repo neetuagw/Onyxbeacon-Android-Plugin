@@ -10,8 +10,17 @@ To use this plugin you need to make sure that you have registered your applicati
 ```
 #!python
 
-cordova plugin add https://bitbucket.org/spartadigital/onyx-cordovaplugin.git --save --variable APP_ID="123456789" --variable APP_NAME="myApplication"
+cordova plugin add https://bitbucket.org/spartadigital/onyx-cordovaplugin.git --save --variable SA_CLIENTID="123456789" --variable SA_SECRET="myApplication"
 ```
 ## **Methods** ##
 
 1. Receive content on click notification:
+Call following function on device ready
+
+```
+#!python
+document.addEventListener('notificationReceived', function(info) {
+    console.log("Content", info);
+}
+
+```
