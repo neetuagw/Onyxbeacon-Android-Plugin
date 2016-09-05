@@ -31,7 +31,7 @@ You can find the file here : application > platform > android > AndroidManifest.
 	android:enabled="true"
 	android:exported="true"></provider>
 ```
-After that please add notification icon image called 'ic_notification.png' in your android resources here : application > platform > android > res > drawable. You can also make a copy of your application icon image and name it 'ic_notification.png'
+After that please add notification icon image called **'ic_notification.png'** in your android resources here : application > platform > android > res > drawable. You can also make a copy of your application icon image and name it **'ic_notification.png'**
 
 ## **Methods** ##
 
