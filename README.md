@@ -35,7 +35,7 @@ After that please add notification icon image called **'ic_notification.png'** i
 
 ## **Methods** ##
 
-1. Check Bluetooth State
+1.Check Bluetooth State
 
 ```
 #!python
