@@ -12,7 +12,7 @@ This plugin specifically developed for hybrid applications. Once a beacon is in 
 
 To use this plugin you need to make sure that you have registered your application to Onyx CMS and received ClientID and Secret key. 
 
-**1.**You need to provide ClientId and Secret Key as a variable while installing the plugin. You can install the plugin in following way:
+**1.** You need to provide ClientId and Secret Key as a variable while installing the plugin. You can install the plugin in following way:
 
 
 ```
@@ -20,7 +20,7 @@ To use this plugin you need to make sure that you have registered your applicati
 
 cordova plugin add https://bitbucket.org/spartadigital/onyx-cordovaplugin.git --save --variable SA_CLIENTID="123456789" --variable SA_SECRET="myApplication"
 ```
-**2.**Add the following code in Android Manifest file:
+**2.** Add the following code in Android Manifest file:
 You can find the file here : application > platform > android > AndroidManifest.xml
 
 
@@ -33,7 +33,7 @@ You can find the file here : application > platform > android > AndroidManifest.
 	android:enabled="true"
 	android:exported="true"></provider>
 ```
-**3.**After that please add notification icon image called **'ic_notification.png'** in your android resources here : application > platform > android > res > drawable. You can also make a copy of your application icon image and name it **'ic_notification.png'**
+**3.** After that please add notification icon image called **'ic_notification.png'** in your android resources here : application > platform > android > res > drawable. You can also make a copy of your application icon image and name it **'ic_notification.png'**
 
 ## **Methods** ##
 
