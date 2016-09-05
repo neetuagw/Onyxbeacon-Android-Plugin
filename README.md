@@ -18,6 +18,21 @@ To use this plugin you need to make sure that you have registered your applicati
 
 cordova plugin add https://bitbucket.org/spartadigital/onyx-cordovaplugin.git --save --variable SA_CLIENTID="123456789" --variable SA_SECRET="myApplication"
 ```
+Add the following code in Android Manifest file:
+You can find the file here : application > platform > android > AndroidManifest.xml
+
+
+```
+#!python
+
+<provider
+	android:authorities="your.package.name.provider"
+	android:name="com.onyxbeaconservice.provider.IBeaconProvider"
+	android:enabled="true"
+	android:exported="true"></provider>
+```
+
+
 ## **Methods** ##
 
 1. Check Bluetooth State
