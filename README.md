@@ -37,7 +37,7 @@ You can find the file here : application > platform > android > AndroidManifest.
 
 ## **Methods** ##
 
-1.Check Bluetooth State
+**1.** Check Bluetooth State
 
 ```
 #!python
@@ -47,7 +47,7 @@ onyxbeacon.bluetoothState(function(){//success}, function(){//error});
 ```
 
 
-2.Receive content on click notification:
+**2.** Receive content on click notification:
 Call following function on device ready
 
 ```
@@ -63,7 +63,7 @@ document.addEventListener('notificationReceived', function(info) {
 
 ```
 
-3.Range list of beacons around [Only for IOS]
+**3.** Range list of beacons around [Only for IOS]
 
 
 ```
