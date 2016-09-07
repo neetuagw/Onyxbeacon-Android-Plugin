@@ -1,5 +1,6 @@
 package com.sparta.onyxbeacon;
 
+import android.app.Activity;
 import org.apache.cordova.CordovaArgs;
 import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.CordovaInterface;
@@ -35,7 +36,7 @@ import com.onyxbeaconservice.IBeacon;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OnyxbeaconPhonegap extends CordovaPlugin {
+public class OnyxbeaconPhonegap extends CordovaPlugin implements OnyxBeaconsListener {
     private OnyxBeaconManager onyxManager;
     private OnyxBeaconsListener mOnyxBeaconListener;
     private String CONTENT_INTENT_FILTER;
@@ -43,7 +44,7 @@ public class OnyxbeaconPhonegap extends CordovaPlugin {
     private ContentReceiver mContentReceiver;
     
     private CallbackContext mBluetoothStateCallbackContext;
-    private CallbackContext mRangingCallback;
+    
 
     private boolean receiverRegistered = false;
     
@@ -52,6 +53,7 @@ public class OnyxbeaconPhonegap extends CordovaPlugin {
     private static final String LOGTAG = "OnyxbeaconsPhonegap";
     
     private static CallbackContext pushContext;
+    private static CallbackContext mRangingCallback;
     private static CordovaWebView gWebView;
     private static Bundle gCachedExtras = null;
     
@@ -85,7 +87,9 @@ public class OnyxbeaconPhonegap extends CordovaPlugin {
         onyxManager.setCouponEnabled(true);
         onyxManager.setAPIContentEnabled(true);
         
-		mRangedBeacons = new ArrayList<IBeacon>();
+        mContentReceiver.setOnyxBeaconsListener(this);
+        
+		//mRangedBeacons = new ArrayList<IBeacon>();
 
     }
     
@@ -98,8 +102,9 @@ public class OnyxbeaconPhonegap extends CordovaPlugin {
             pushContext = callbackContext;
         }else if("checkbluetoothState".equals(action)){
             checkBluetoothState(args , callbackContext);
-        }else if("rangeBeacon".equals(action)){
-            startRangingBeacons(args , callbackContext);
+        }else if("startRanging".equals(action)){
+            mRangingCallback = callbackContext;
+            //startRangingBeacons(args , callbackContext);
         }else{
             callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.INVALID_ACTION));
             return false;
@@ -133,10 +138,10 @@ public class OnyxbeaconPhonegap extends CordovaPlugin {
         }
     }
 
-    private void startRangingBeacons(CordovaArgs cordovaArgs,final CallbackContext callbackContext){
-        mRangingCallback = callbackContext;
-        new BeaconListener();
-    }
+    // private void startRanging(CordovaArgs cordovaArgs,final CallbackContext callbackContext){
+    //     mRangingCallback = callbackContext;
+    //     new BeaconListener();
+    // }
     
     /**
 	 * Check if Bluetooth is enabled and return result to JavaScript.
@@ -163,6 +168,36 @@ public class OnyxbeaconPhonegap extends CordovaPlugin {
 			mBluetoothStateCallbackContext = null;
 		}
 	}
+    
+    
+    @Override
+    public void didRangeBeaconsInRegion(final List<IBeacon> beacons) {
+        Log.d("ONYX RANGE BEACON", "DidRangeBeacons Called");
+        Log.d("ONYX RANGE BEACON PAYLOAD", "BeaconLength :"+ beacons.size());
+        Activity currentActivity = cordova.getActivity();
+        
+        JSONObject jsonObj = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        
+        try{
+            for(IBeacon b: beacons){
+                JSONObject beacon = new JSONObject();
+                beacon.put("proximityUUID", b.getProximityUuid());
+              	beacon.put("major", b.getMajor());
+              	beacon.put("minor", b.getMinor());
+                    
+                Log.d("ONYX RANGE Beacon configuration", "" + b.getProximityUuid() + " ," +  b.getMajor());
+                    
+                jsonArray.put(beacon);
+            }
+            jsonObj.put("beacons", jsonArray);
+            //OnyxbeaconPhonegap.sendBeacon(jsonObj);
+            OnyxbeaconPhonegap.sendBeacon(jsonArray);
+                
+            }catch(JSONException e){
+                Log.e("Scan beacon ERROR", ""+e);
+            }
+    }
     
     @Override
     public void onPause(boolean multitasking) {
@@ -227,6 +262,16 @@ public class OnyxbeaconPhonegap extends CordovaPlugin {
         }
     }
     
+    public static void sendBeacon(JSONArray _json) {
+        Log.d("ONYX", "sending BEACON callback");
+        Log.d("ONYX BEACON JSON", "sending json "+_json);
+        PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, _json);
+        pluginResult.setKeepCallback(true);
+        if (mRangingCallback != null) {
+            mRangingCallback.sendPluginResult(pluginResult);
+        }
+    }
+    
     private static JSONObject convertBundleToJson(Bundle extras) {
         Log.d(LOG_TAG, "convert extras to json");
         try {
@@ -265,50 +310,5 @@ public class OnyxbeaconPhonegap extends CordovaPlugin {
         return gWebView != null;
     }
 
-    class BeaconListener implements OnyxBeaconsListener {
 
-        @Override
-        public void didRangeBeaconsInRegion(final List<IBeacon> beacons) {
-
-            Log.i("BeaconListener" , " "+beacons);
-
-            JSONObject json = new JSONObject();
-            JSONArray array = new JSONArray();
-
-            mRangedBeacons.clear();
-            mRangedBeacons.addAll(beacons);
-
-            try{
-
-                for(IBeacon b:beacons){
-                    String address = b.getBluetoothAddress();
-                    String proximityUUID = b.getProximityUuid();
-
-                    JSONObject beacon = new JSONObject();
-
-                    beacon.put("macAddress", address);
-                    beacon.put("proximityUUID", proximityUUID);
-                    beacon.put("major", b.getMajor());
-                    beacon.put("minor", b.getMinor());
-                    beacon.put("rssi", b.getRssi());
-
-                    array.put(beacon);
-
-                }
-
-                json.put("beacons",array);
-
-                if(mRangingCallback != null){
-                    PluginResult result = new PluginResult(PluginResult.Status.OK , json);
-                    result.setKeepCallback(true);
-                    mRangingCallback.sendPluginResult(result);
-                }else{
-                    Log.i("Beacon Listener", "CallbackContext for discovery does not exist");
-                }
-
-            }catch(JSONException e){
-                Log.i(LOGTAG , "JSON Exception "+e);
-            }
-        }
-    }
 }
