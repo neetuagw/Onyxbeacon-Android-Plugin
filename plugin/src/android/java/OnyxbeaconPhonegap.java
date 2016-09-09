@@ -182,7 +182,7 @@ public class OnyxbeaconPhonegap extends CordovaPlugin implements OnyxBeaconsList
         try{
             for(IBeacon b: beacons){
                 JSONObject beacon = new JSONObject();
-                beacon.put("proximityUUID", b.getProximityUuid());
+                beacon.put("uuid", b.getProximityUuid());
               	beacon.put("major", b.getMajor());
               	beacon.put("minor", b.getMinor());
                     
