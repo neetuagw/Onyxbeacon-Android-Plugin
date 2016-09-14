@@ -15,6 +15,8 @@
 	
 	<preference name="SA_CLIENTID" />
         <preference name="SA_SECRET" />
+        <preference name="PROVIDER_PACKAGE_NAME" />
+        <preference name="LOCATION_USAGE_DESC" />
 	
 	<platform name="android">
 		<!-- android-specific elements -->
@@ -57,11 +59,11 @@
 			<meta-data android:name="clientid" android:value="$SA_CLIENTID" />
                         <meta-data android:name="secret" android:value="$SA_SECRET" />
 			
-<!-- 			<provider
-				android:authorities="com.sparta.onyxbeacon.provider"
+			<provider
+				android:authorities=$PROVIDER_PACKAGE_NAME
 				android:name="com.onyxbeaconservice.provider.IBeaconProvider"
 				android:enabled="true"
-				android:exported="true"></provider> -->
+				android:exported="true"></provider>
         </config-file>
 		
 		<framework src="plugin/src/android/onyxbeacon.gradle" custom="true" type="gradleReference" />
@@ -107,7 +109,7 @@
                 <dependency id="cordova-plugin-afnetworking"/>
                 
                 <config-file target="*-Info.plist" parent="NSLocationAlwaysUsageDescription">
-                        <string>This is required for iBeacon experience</string>
+                        <string>$LOCATION_USAGE_DESC</string>
                 </config-file>
     
         </platform>
