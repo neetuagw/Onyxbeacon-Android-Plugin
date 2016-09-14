@@ -60,7 +60,7 @@
                         <meta-data android:name="secret" android:value="$SA_SECRET" />
 			
 			<provider
-				android:authorities=$PROVIDER_PACKAGE_NAME
+				android:authorities="$PROVIDER_PACKAGE_NAME"
 				android:name="com.onyxbeaconservice.provider.IBeaconProvider"
 				android:enabled="true"
 				android:exported="true"></provider>
