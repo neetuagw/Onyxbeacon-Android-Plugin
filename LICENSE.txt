@@ -1,5 +1,5 @@
 1. Preamble: This Agreement, signed on Sep 1, 2016 (hereinafter: Effective Date) governs the relationship between Craft Nation Ventures, a Business Entity,
-(hereinafter: Licensee) and Sparta Technologies Ltd, a duly registered company in whose principal place of business is {location} (hereinafter: Licensor). This
+(hereinafter: Licensee) and Sparta Technologies Ltd, a duly registered company in whose principal place of business is Unit 1e, Basil Chambers, 65 High Street, Manchester, M4 1FS. (hereinafter: Licensor). This
 Agreement sets the terms, rights, restrictions and obligations on using Onyx Cordova Plugin (hereinafter: The Software) created and owned by Licensor, as detailed
 herein
 

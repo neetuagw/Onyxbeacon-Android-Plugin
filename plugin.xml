@@ -6,7 +6,7 @@
 
 	<name>OnyxbeaconPhonegap</name>
     <description>Phonegap/Cordova Plugin for OnyxBeacon</description>
-    <license>Onyx Cordova Plugin</license>
+    <license>Proprietry</license>
     <keywords>Onyx,Beacons</keywords>
 	
 	<js-module src="plugin/www/onyxbeacon.js" name="OnyxbeaconPhonegap">
