@@ -14,9 +14,9 @@
 	</js-module>
 	
 	<preference name="SA_CLIENTID" />
-        <preference name="SA_SECRET" />
-        <preference name="PROVIDER_PACKAGE_NAME" />
-        <preference name="LOCATION_USAGE_DESC" />
+    <preference name="SA_SECRET" />
+    <preference name="PROVIDER_PACKAGE_NAME" />
+    <preference name="LOCATION_USAGE_DESC" />
 	
 	<platform name="android">
 		<!-- android-specific elements -->
@@ -38,12 +38,8 @@
 			<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     	</config-file>
 		
-		<!--Broadcast Receiver-->
 		<config-file target="AndroidManifest.xml" parent="/manifest/application">
-			
-			
-			<!--<service android:name="com.onyxbeacon.service.OnyxBeaconService"
-             android:exported="false"/>-->
+
             <activity android:name="com.sparta.onyxbeacon.TransparentActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar" android:launchMode="singleTask"/>
 			<activity android:name="com.sparta.onyxbeacon.NotificationHandler"/>
             <receiver android:name="com.sparta.onyxbeacon.ContentReceiver">
@@ -57,7 +53,7 @@
 				</intent-filter>
 			</receiver>
 			<meta-data android:name="clientid" android:value="$SA_CLIENTID" />
-                        <meta-data android:name="secret" android:value="$SA_SECRET" />
+            <meta-data android:name="secret" android:value="$SA_SECRET" />
 			
 			<provider
 				android:authorities="$PROVIDER_PACKAGE_NAME"
@@ -69,7 +65,6 @@
 		<framework src="plugin/src/android/onyxbeacon.gradle" custom="true" type="gradleReference" />
 		
 		<source-file src="plugin/src/android/OnyxBeaconLibrary-release.aar" target-dir="libs" />
-<!--         <source-file src="plugin/src/android/realm-android-0.86.0.jar" target-dir="libs"/> -->
 		<source-file src="plugin/src/android/retrofit-1.9.0.jar" target-dir="libs"/>
 		
 		<source-file src="plugin/src/android/java/OnyxbeaconPhonegap.java" target-dir="src/com/sparta/onyxbeacon" />
@@ -78,7 +73,6 @@
         <source-file src="plugin/src/android/java/ContentReceiver.java" target-dir="src/com/sparta/onyxbeacon" />
         <source-file src="plugin/src/android/java/BleStateReceiver.java" target-dir="src/com/sparta/onyxbeacon" />
         <source-file src="plugin/src/android/layout/notification.xml" target-dir="res/layout" />
-<!--         <source-file src="plugin/src/android/drawable/notify_icon.png" target-dir="res/drawable" /> -->
 		
 	</platform>
 	
