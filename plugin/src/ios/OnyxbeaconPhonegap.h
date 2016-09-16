@@ -1,18 +1,26 @@
 #import <Cordova/CDV.h>
+#import <CoreBluetooth/CoreBluetooth.h>
+#import <OnyxBeaconLib/OnyxBeacon.h>
 #import <AFNetworking/AFNetworking.h>
-#import <SafariServices/SafariServices.h>
 
 @protocol OnyxbeaconPhonegap;
 
 
-@interface OnyxbeaconPhonegap : CDVPlugin <SFSafariViewControllerDelegate>
+@interface OnyxbeaconPhonegap : CDVPlugin
+    
+@property (nonatomic, strong) NSString* notificationCallbackId;
+@property (nonatomic, strong) NSString* checkBluetoothCallbackId;
+@property (nonatomic, strong) NSArray *coupons;
+@property (nonatomic, strong) CBCentralManager *bluetoothManager;
+@property (nonatomic, strong) NSMutableArray *rangedBeacons;
+@property (nonatomic, strong) NSString *url;  
 
-- (void)showSafari:(NSString *)url;
-- (void)safariViewControllerDidFinish:(SFSafariViewController *)controller;
 
-- (void)initialiseSDK:(CDVInvokedUrlCommand*)command;
-- (void)checkbluetoothState:(CDVInvokedUrlCommand*)command;
-- (void)startRanging:(CDVInvokedUrlCommand*)command;
-
+- (void)initialiseSDK:(CDVInvokedUrlCommand *)command;
+- (void)checkbluetoothState:(CDVInvokedUrlCommand *)command;
+- (void)startRanging:(CDVInvokedUrlCommand *)command;
+- (void)handleNotification:(NSDictionary *)coupon;
 
 @end
+
+    

@@ -1,51 +1,23 @@
-#import <CoreBluetooth/CoreBluetooth.h>
 #import "OnyxbeaconPhonegap.h"
-#import <OnyxBeaconLib/OnyxBeacon.h>
-#import <AFNetworking/AFNetworking.h>
-#import <SafariServices/SafariServices.h>
 
-@interface OnyxbeaconPhonegap ()
 
-@property (nonatomic, strong) NSArray *coupons;
-
-/**
-  * Class-wide instance of the CDVInvolkedUrlCommand: which gets returned with the callback
-  */
-@property (nonatomic, strong) CDVInvokedUrlCommand *com;
-
-@property (nonatomic, strong) CBCentralManager *bluetoothManager;
-@property (nonatomic, strong) NSMutableArray *rangedBeacons;
-@property (nonatomic, strong) NSString *url;
-@property (nonatomic, strong) NSString *couponCallbackId;
-
-@end
-
+    
 @implementation OnyxbeaconPhonegap
 
-- (void)showSafari:(NSString *)url {
-    SFSafariViewController *sfvc = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:url]];
-    sfvc.delegate = self;
-    [self.viewController presentViewController:sfvc
-        animated:YES
-        completion:nil
-    ];
-}
-
+@synthesize notificationCallbackId, checkBluetoothCallbackId;
+    
 #pragma mark - Plugin calls
-
+    
 - (void)initialiseSDK:(CDVInvokedUrlCommand*)command {
-    /*[[OnyxBeacon sharedInstance] setLogger:^(NSString *message) {
-        NSLog(@"OnyxBeacon: %@", message);
-    }];*/
-
-    // Permissions
-        if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) {
-            UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeBadge
+        
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeBadge
                                                                                                  |UIUserNotificationTypeSound
                                                                                                  |UIUserNotificationTypeAlert)
                                                                                      categories:nil];
-            [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-        }
+    	[[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+    }
+    
     [[UIApplication sharedApplication] registerForRemoteNotifications];
 
     // Onyx
@@ -56,8 +28,10 @@
     [[OnyxBeacon sharedInstance] startServiceWithClientID:clientid secret:secret];
     [[OnyxBeacon sharedInstance] setDelegate:self];
     [[OnyxBeacon sharedInstance] setContentDelegate:self];
-    self.com = command;
-    self.couponCallbackId = self.com.callbackId;
+    
+    notificationCallbackId = command.callbackId;
+    
+
     self.rangedBeacons = [[NSMutableArray alloc] init];
 }
 
@@ -66,6 +40,8 @@
                               initWithDelegate:self
                               queue:dispatch_get_main_queue()
                               options:@{CBCentralManagerOptionShowPowerAlertKey: @(NO)}];
+    
+    checkBluetoothCallbackId = command.callbackId;
 }
 
 - (void)startRanging:(CDVInvokedUrlCommand*)command {
@@ -75,19 +51,28 @@
      [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
+- (void)handleNotification:(NSDictionary *)coupon {
+        CDVPluginResult* pluginResult = nil;
+		
+    	if( notificationCallbackId ) {
+        	pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:coupon];
+        	[pluginResult setKeepCallback:[NSNumber numberWithBool:true]];
+        	[self.commandDelegate sendPluginResult:pluginResult callbackId:notificationCallbackId];
+        }
+  }
 
 #pragma mark - Onyx framework methods
-
 
 - (void)didReceiveContent:(NSArray *)coupons {
     [self loadContent];
 }
 
 - (void)loadContent {
-    CDVPluginResult* pluginResult = nil;
+    // CDVPluginResult* pluginResult = nil;
     NSDictionary *returnCoupon = nil;
-
     NSArray *coupons = [[OnyxBeacon sharedInstance] getContent];
+    
+    
     for (OBContent *coupon in coupons) {
         if (coupon.contentState == ContentStateUnread) {
             returnCoupon = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -99,49 +84,21 @@
                 coupon.title ? [NSString stringWithString:coupon.title] : @"", @"title",
                 coupon.path ? [NSString stringWithString:coupon.path] : @"", @"path",
                 coupon.message ? [NSString stringWithString:coupon.message] : @"", @"message",
-                coupon.description ? [NSString stringWithString:coupon.couponDescription] : @"", @"couponDescription",
+                coupon.couponDescription ? [NSString stringWithString:coupon.couponDescription] : @"", @"couponDescription",
                 coupon.uuid ? [NSNumber numberWithInt:coupon.uuid] : @"", @"uuid",
                 nil
             ];
 
-            self.url = [returnCoupon objectForKey:@"action"];
-
-            UILocalNotification *notification = [[UILocalNotification alloc] init];
-            notification.alertBody = coupon.message;
-            notification.userInfo = @{@"url": [returnCoupon objectForKey:@"action"]};
-            notification.soundName = UILocalNotificationDefaultSoundName;
+            UILocalNotification* notification = [[UILocalNotification alloc] init];
+                                 notification.alertBody = coupon.message;
+                                 notification.userInfo = returnCoupon;
+                                 notification.soundName = UILocalNotificationDefaultSoundName;
+            
             [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
-
-            UIApplicationState state = [[UIApplication sharedApplication] applicationState];
-            if (state == UIApplicationStateActive) {
-                if ([returnCoupon objectForKey:@"action"] == @"") {
-                    /*UIAlertView *alert = [[UIAlertView alloc] initWithTitle:coupon.title
-                                                                    message:coupon.message
-                                                                   delegate:self
-                                                                   cancelButtonTitle:@"Close"
-                                                                    otherButtonTitles:nil];
-                    [alert show];*/
-                } else {
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:coupon.title
-                                                                    message:coupon.message
-                                                                   delegate:self
-                                                                   cancelButtonTitle:@"Close"
-                                                                    otherButtonTitles:@"View", nil];
-                    //[alert show];
-                }
-            }
         }
     }
 
     [[OnyxBeacon sharedInstance] clearCoupons];
-
-    if (self.couponCallbackId) {
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:returnCoupon];
-        [pluginResult setKeepCallback:[NSNumber numberWithBool:YES]];
-        [self.commandDelegate sendPluginResult:pluginResult callbackId:self.couponCallbackId];
-    } else {
-        self.couponCallbackId = self.com.callbackId;
-    }
 }
 
 - (void)didRangeBeacons:(NSArray *)beacons inRegion:(OBBeaconRegion *)region {
@@ -161,17 +118,6 @@
      }
 }
 
-
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 1) { // the user clicked OK
-        [self showSafari:self.url];
-    }
-}
-
-
-
-
-
 #pragma mark - Bluetooth Methods
 
 - (void)centralManagerDidUpdateState:(CBCentralManager *)central {
@@ -187,12 +133,16 @@
     }
 
     NSLog(state ? @"BT? Yes" : @"BT? No");
-    if (self.com.callbackId) {
+    if (checkBluetoothCallbackId) {
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:state];
-        [self.commandDelegate sendPluginResult:pluginResult callbackId:self.com.callbackId];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:checkBluetoothCallbackId];
     }
 
 }
 
 
 @end
+    
+    
+    
+    
