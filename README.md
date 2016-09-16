@@ -18,7 +18,7 @@ To use this plugin you need to make sure that you have registered your applicati
 ```
 #!python
 
-cordova plugin add https://bitbucket.org/spartadigital/onyx-cordovaplugin.git --save --variable SA_CLIENTID="123456789" --variable SA_SECRET="myApplication"
+cordova plugin add https://bitbucket.org/spartadigital/onyx-cordovaplugin.git --save --variable SA_CLIENTID="123456789" --variable SA_SECRET="myApplication" --variable PROVIDER_PACKAGE_NAME="com.example.app.provider" --variable LOCATION_USAGE_DESC="this is for Ibeacon experience"
 ```
 
 **2.** **[ANDROID ONLY] - ** Add notification icon image called **'ic_notification.png'** in your android resources here : application > platform > android > res > drawable. You can also make a copy of your application icon image and name it **'ic_notification.png'**
