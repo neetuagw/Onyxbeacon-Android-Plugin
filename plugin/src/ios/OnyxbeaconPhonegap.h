@@ -10,6 +10,10 @@
     
 @property (nonatomic, strong) NSString* notificationCallbackId;
 @property (nonatomic, strong) NSString* checkBluetoothCallbackId;
+@property (nonatomic, strong) NSString* rangeBeaconsCallbackId;
+
+@property (nonatomic, strong) NSMutableArray* RangedBeaconList;
+
 @property (nonatomic, strong) NSArray *coupons;
 @property (nonatomic, strong) CBCentralManager *bluetoothManager;
 @property (nonatomic, strong) NSMutableArray *rangedBeacons;

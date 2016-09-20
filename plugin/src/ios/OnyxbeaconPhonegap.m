@@ -4,7 +4,7 @@
     
 @implementation OnyxbeaconPhonegap
 
-@synthesize notificationCallbackId, checkBluetoothCallbackId;
+@synthesize notificationCallbackId, checkBluetoothCallbackId, RangedBeaconList, rangeBeaconsCallbackId;
     
 #pragma mark - Plugin calls
     
@@ -31,8 +31,7 @@
     
     notificationCallbackId = command.callbackId;
     
-
-    self.rangedBeacons = [[NSMutableArray alloc] init];
+    RangedBeaconList = [[NSMutableArray alloc] init];
 }
 
 - (void)checkbluetoothState:(CDVInvokedUrlCommand*)command {
@@ -45,10 +44,16 @@
 }
 
 - (void)startRanging:(CDVInvokedUrlCommand*)command {
-     CDVPluginResult* pluginResult = nil;
+     RangedBeaconList = [[NSMutableArray alloc] init];
+     rangeBeaconsCallbackId = command.callbackId;
+    
+    [self performSelector:@selector(sendRangedBeacons) withObject:nil afterDelay:1.0];
+}
 
-     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:self.rangedBeacons];
-     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+-(void)sendRangedBeacons {
+    CDVPluginResult* pluginResult = nil;
+     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:RangedBeaconList];
+     [self.commandDelegate sendPluginResult:pluginResult callbackId:rangeBeaconsCallbackId];
 }
 
 - (void)handleNotification:(NSDictionary *)coupon {
@@ -103,7 +108,8 @@
 
 - (void)didRangeBeacons:(NSArray *)beacons inRegion:(OBBeaconRegion *)region {
      NSDictionary *beacon = nil;
-
+    
+    
      for (OBBeacon *b in beacons) {
         beacon = [NSDictionary dictionaryWithObjectsAndKeys:
             b.uuid ? [b.uuid UUIDString] : @"", @"uuid",
@@ -112,11 +118,11 @@
             nil
         ];
 
-         if (![self.rangedBeacons containsObject:beacon]) {
-             [self.rangedBeacons addObject:beacon];
+         if (![RangedBeaconList containsObject:beacon]) {
+             [RangedBeaconList addObject:beacon];
          }
      }
-}
+  }
 
 #pragma mark - Bluetooth Methods
 
