@@ -3,14 +3,10 @@ var exec = require('cordova/exec');
 /**
  * Main exported module.
  * @namespace onyxbeacon
+ * @class OnyxbeaconPhonegap
  */
 
-var OnyxbeaconPhonegap = function OnyxbeaconPhonegap (){
-    this.initialise();
-};
-
-//Initialise the Onyx SDK
-OnyxbeaconPhonegap.prototype.initialise = function(){
+var OnyxbeaconPhonegap = function OnyxbeaconPhonegap () {
     
     var success = function(info) {
         console.log("Successfully Received Notification", info);
@@ -20,20 +16,41 @@ OnyxbeaconPhonegap.prototype.initialise = function(){
     var error = function(error) {
         console.error(error);
     };
-    
+
     exec(success,error,'OnyxbeaconPhonegap','initialiseSDK',[]);
 }
 
-//Check Bluetooth State
-OnyxbeaconPhonegap.prototype.bluetoothState = function(success , error){
-    exec(success,error,'OnyxbeaconPhonegap','checkbluetoothState',[]);
+/** 
+ * startOnyxNotifications
+ * used to start Receiving Notifications from Onyx
+ */
+OnyxbeaconPhonegap.prototype.startOnyxNotifications = function startOnyxNotifications() {
+    throw new Error('Not Yet Implemented');
+}
+
+/** 
+ * startOnyxNotifications
+ * used to start Receiving Notifications from Onyx
+ */
+OnyxbeaconPhonegap.prototype.stopOnyxNotifications = function stopOnyxNotifications() {
+    throw new Error('Not Yet Implemented');
+}
+
+/**
+ * getBluetoothState
+ * @returns {Promise<status>} - The Status of the bleutooth on the device
+ * @resolve isBluetoothEnabled {boolean}- The Status of the bluetooth, On/Off
+ */
+OnyxbeaconPhonegap.prototype.getBluetoothState = function getBluetoothState() {
+    return new Promise(function(resolve, reject) {
+        exec(resolve,reject,'OnyxbeaconPhonegap','checkbluetoothState',[]);
+    });
 };
 
 /** Range Beacons 
- * @returns {Promise} - a promise with a beacons array. 
- * IOS ONLY
+ * @returns {Promise<beacon[]>} - a promise with a beacons array. 
 **/
-OnyxbeaconPhonegap.prototype.rangeBeacon = function() {
+OnyxbeaconPhonegap.prototype.rangeBeacon = function rangeBeacon() {
     return new Promise(function(resolve, reject) {
         exec(resolve,reject,'OnyxbeaconPhonegap','startRanging',[]);
     })
